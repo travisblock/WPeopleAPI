@@ -11,7 +11,7 @@ class WPeopleAPI
 {
 
     private $file_token,
-        $base_url = 'http://localhost/testapi/wp-admin/options-general.php?page=wpeopleapi-setting',
+        $base_url = false,
         $client,
         $message,
         $client_secret,
@@ -35,6 +35,8 @@ class WPeopleAPI
             $this->message = 'Client secret not found';
             return false;
         }
+
+        $this->setBaseUrl();
 
         $client = new Client();
         $client->setAccessType('offline');
@@ -139,9 +141,25 @@ class WPeopleAPI
      * @param $url string url
      * @return Bims\WPeopleAPI $base_url
      */
-    public function setBaseUrl($url)
+    public function setBaseUrl($url = false)
     {
+        if (!$url) {
+            $the_base  = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
+            $the_base .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+            $the_base .= 'wp-admin/options-general.php?page=wpeopleapi-setting';
+            return $this->base_url = $the_base;
+        }
         return $this->base_url = $url;
+    }
+
+    /**
+     * Get base url 
+     * 
+     * @return Bims\WPeopleAPI $base_url
+     */
+    public function getBaseUrl()
+    {
+        return $this->base_url;
     }
 
     /**
