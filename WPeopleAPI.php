@@ -17,6 +17,9 @@ class WPeopleAPI
         $client_secret,
         $prefix;
 
+    /**
+     * Constructor of Bims\WPeopleAPI class.
+     */
     public function __construct($client_id = false, $client_secret = false)
     {
         $init = Instance::init();
@@ -96,9 +99,8 @@ class WPeopleAPI
                     'Accept'        => 'application/json'
                 ]
             ]);
-            header('content-type:application/json');
-            echo $response->getBody()->getContents();
-            return true;
+
+            return json_encode($response->getBody());
         } catch (Throwable $e) {
             $this->message = $e->getMessage();
             return false;
@@ -106,9 +108,9 @@ class WPeopleAPI
     }
 
     /**
-     * Store token to file
+     * Store access token to json file with auth code
      * 
-     * @param string $code
+     * @param $code string of auth code
      */
     public function storeToken($code)
     {
@@ -120,16 +122,33 @@ class WPeopleAPI
         return header('Location: ' . $this->base_url);
     }
 
+    /**
+     * Set file token name
+     * 
+     * @param $filename string of named file
+     * @return Bims\WPeopleAPI $file_token
+     */
     public function setFileToken($filename)
     {
-        $this->file_token = $filename;
+        return $this->file_token = $filename;
     }
 
+    /**
+     * Set base_url to redirect url
+     * 
+     * @param $url string url
+     * @return Bims\WPeopleAPI $base_url
+     */
     public function setBaseUrl($url)
     {
-        $this->base_url = $url;
+        return $this->base_url = $url;
     }
 
+    /**
+     * Get access token
+     * 
+     * @return json access token
+     */
     public function getToken()
     {
         if (!is_file(dirname(__FILE__) . '/' . $this->file_token)) {
@@ -141,16 +160,33 @@ class WPeopleAPI
         return (isset($json->access_token)) ? $json : false;
     }
 
+    /**
+     * Get message of error message or success
+     * 
+     * @return Bims\WPeopleAPI $message
+     */
     public function getMessage()
     {
         return $this->message;
     }
 
+    /**
+     * Get client secret file
+     * 
+     * @return Bims\WPeopleAPI $client_secret
+     */
     public function getClientSecret()
     {
         return $this->client_secret;
     }
 
+    /**
+     * Get information of access token
+     * 
+     * @param $access_token string of access token
+     * 
+     * @return json token information
+     */
     public function tokenInfo($access_token)
     {
         $http = new Http();
@@ -160,7 +196,6 @@ class WPeopleAPI
                 return false;
             }
 
-            header('content-type:application/json');
             return json_decode($response->getBody());
         } catch (Throwable $e) {
             $this->message = $e->getMessage();
@@ -168,6 +203,13 @@ class WPeopleAPI
         }
     }
 
+    /**
+     * Store access token to json file, using to store refresh token
+     * 
+     * @param $token string of access token
+     * 
+     * @return bool
+     */
     public function storeJsonToken($token)
     {
         $json = json_encode($token, JSON_PRETTY_PRINT);
@@ -179,7 +221,12 @@ class WPeopleAPI
         }
     }
 
-
+    /**
+     * Show lists contect in google contact
+     * 
+     * @param $access_token string of access token
+     * @return GuzzleHttp\Client response
+     */
     public function lists($access_token)
     {
         $http = new Http();
@@ -190,15 +237,22 @@ class WPeopleAPI
                     'Accept'        => 'application/json'
                 ]
             ]);
-            header('content-type:application/json');
-            echo $response->getBody()->getContents();
-            return true;
+
+            return json_encode($response->getBody());
         } catch (Throwable $e) {
             $this->message = $e->getMessage();
             return false;
         }
     }
 
+    /**
+     * Store client_id and client_secret to json file
+     * 
+     * @param $client_id string of client_id
+     * @param $client_secret string of client_secret
+     * 
+     * @return redirect to base_url
+     */
     public function storeClientSecret($client_id = false, $client_secret = false)
     {
 
@@ -224,6 +278,11 @@ class WPeopleAPI
         }
     }
 
+    /**
+     * Remove authorization, unlink json file of access_token and client_secret and set null prefix of Filename.php
+     * 
+     * @return redirect to base_url
+     */
     public function removeAuthorization()
     {
         $the_token      = dirname(__FILE__) . '/' . $this->file_token;
