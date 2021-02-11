@@ -67,14 +67,20 @@ if (is_file(dirname(__FILE__) . '/' . $people->getClientSecret())) {
         }
 
         if (isset($_GET['wpeopleapi']) && $_GET['wpeopleapi'] == 'create') {
-            if ($_SERVER['REQUEST_METHOD'] == 'post') {
-                $name   = $_POST['name'];
-                $phone  = $_POST['phone'];
-                $email  = $_POST['email'];
-                if (isset($name) && isset($phone) && isset($email)) {
-                    $people->store($name, $phone, $email);
-                }
+            $name   = $_GET['name'];
+            $phone  = $_GET['phone'];
+            $email  = $_GET['email'];
+            if (isset($name) && isset($phone) && isset($email)) {
+                $people->store($name, $phone, $email);
             }
+            // if ($_SERVER['REQUEST_METHOD'] == 'post') {
+            //     $name   = $_POST['name'];
+            //     $phone  = $_POST['phone'];
+            //     $email  = $_POST['email'];
+            //     if (isset($name) && isset($phone) && isset($email)) {
+            //         $people->store($name, $phone, $email);
+            //     }
+            // }
         }
     }
 }
