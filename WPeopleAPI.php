@@ -146,7 +146,7 @@ class WPeopleAPI
         if (!$url) {
             $the_base  = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
             $the_base .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-            $the_base .= 'wp-admin/options-general.php?page=wpeopleapi-setting';
+            $the_base .= 'options-general.php?page=wpeopleapi-setting';
             return $this->base_url = $the_base;
         }
         return $this->base_url = $url;

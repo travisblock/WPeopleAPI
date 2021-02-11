@@ -41,7 +41,7 @@ class WPeopleAPISetting
             <p>Here to setting your WPeopleAPI</p>
             <?php settings_errors(); ?>
 
-            <form method="post" action="options.php">
+            <form method="post" action="options-general.php?page=wpeopleapi-setting">
                 <?php
                 settings_fields('wpeopleapi_setting_option_group');
                 do_settings_sections('wpeopleapi-setting-admin');
