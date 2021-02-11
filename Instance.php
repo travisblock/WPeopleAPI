@@ -8,6 +8,11 @@ class Instance
 {
     private static $prefix;
 
+    /**
+     * Init WPeopleAPI with set filename and create access_token json file
+     * 
+     * @return Bims\Instance $prefix
+     */
     public static function init()
     {
         self::$prefix = Filename::filename();
@@ -23,11 +28,17 @@ class Instance
         return self::$prefix;
     }
 
+    /**
+     * Get access token json file name
+     */
     public static function getAccessToken()
     {
         return 'access_token_' .  Filename::filename() . '.json';
     }
 
+    /**
+     * Get client secret json file name
+     */
     public static function getClientSecret()
     {
         return 'client_secret_' . Filename::filename() . '.json';
