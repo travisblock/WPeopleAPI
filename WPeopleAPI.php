@@ -44,6 +44,7 @@ class WPeopleAPI
         $client->addScope('https://www.googleapis.com/auth/contacts');
         $client->setIncludeGrantedScopes(true);
         $client->setRedirectUri($this->base_url);
+        $client->setApprovalPrompt('force');
         $this->client =  $client;
     }
 
