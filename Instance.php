@@ -21,7 +21,7 @@ class Instance
         }
 
         self::$prefix = bin2hex(random_bytes(32));
-        $file = file_get_contents(__DIR__ . '\Filename.php');
+        $file = file_get_contents(__DIR__ . '/Filename.php');
         $file = str_replace('NULL', '"' . self::$prefix . '"', $file);
         file_put_contents(dirname(__FILE__) . '/access_token_' . self::$prefix . '.json', '{}');
         file_put_contents(dirname(__FILE__) . '/Filename.php', $file);
