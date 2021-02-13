@@ -35,8 +35,13 @@ if (is_admin()) {
         exit;
     }
 
+    $people->setBaseUrl();
+    $setting->setBaseUrl($people->getBaseUrl());
+    $setting->showBaseUrl();
+
     if (is_file(dirname(__FILE__) . '/' . $people->getClientSecret())) {
         $setting->setAuthorizer($people->getClient()->createAuthUrl());
+
 
         if ($people->getToken()) {
             if ($people->tokenInfo($people->getToken()->access_token)) {
@@ -55,6 +60,8 @@ if (is_admin()) {
             $people->removeAuthorization();
         }
     }
+    // $people->setBaseUrl();
+    // var_dump($people->getBaseUrl());
 
     $setting->authorizer();
 }

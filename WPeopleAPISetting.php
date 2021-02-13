@@ -9,7 +9,8 @@ class WPeopleAPISetting
     private $wpeopleapi_setting_options,
         $key = 'BWpeople',
         $authorizer = false,
-        $tokenInfo = false;
+        $tokenInfo = false,
+        $base_url = false;
 
     public function __construct($authorizer = false)
     {
@@ -94,10 +95,6 @@ class WPeopleAPISetting
             $sanitary_values['the_client_secret'] = Encryptor::encrypt($input['the_client_secret'], $this->key);
         }
 
-        if (isset($input['authorize_2'])) {
-            $sanitary_values['authorize_2'] = sanitize_text_field($input['authorize_2']);
-        }
-
         return $sanitary_values;
     }
 
@@ -131,6 +128,11 @@ class WPeopleAPISetting
         return $this->tokenInfo = $tokenInfo;
     }
 
+    public function setBaseUrl($base_url)
+    {
+        return $this->base_url = $base_url;
+    }
+
     public function authorizer()
     {
         $that = &$this;
@@ -158,5 +160,29 @@ class WPeopleAPISetting
             echo "Not available";
             return false;
         }
+    }
+
+    public function showBaseUrl()
+    {
+        $that = &$this;
+        add_action('admin_init', function () use ($that) {
+            add_settings_field(
+                'base_url', // id
+                'Authorized redirect URI', // title
+                array($that, 'base_url_callback'), // callback
+                'wpeopleapi-setting-admin', // page
+                'wpeopleapi_setting_setting_section' // section
+            );
+        });
+    }
+
+    public function base_url_callback()
+    {
+        if ($this->base_url) {
+            echo '<input type="text" readonly="readonly" onfocus="this.select();" class="regular-text" value="' . $this->base_url . '">';
+            echo '<p style="font-style: italic;color: #888;">Please copy this URL into the "Authorized redirect URIs" field of your Google web application.</p>';
+            return;
+        }
+        return false;
     }
 }
