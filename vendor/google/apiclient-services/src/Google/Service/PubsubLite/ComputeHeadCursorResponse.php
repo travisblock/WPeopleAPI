@@ -15,16 +15,23 @@
  * the License.
  */
 
-class Google_Service_Document_GoogleCloudDocumentaiUiv1beta3TrainProcessorVersionResponse extends Google_Model
+class Google_Service_PubsubLite_ComputeHeadCursorResponse extends Google_Model
 {
-  public $processorVersion;
+  protected $headCursorType = 'Google_Service_PubsubLite_Cursor';
+  protected $headCursorDataType = '';
 
-  public function setProcessorVersion($processorVersion)
+  /**
+   * @param Google_Service_PubsubLite_Cursor
+   */
+  public function setHeadCursor(Google_Service_PubsubLite_Cursor $headCursor)
   {
-    $this->processorVersion = $processorVersion;
+    $this->headCursor = $headCursor;
   }
-  public function getProcessorVersion()
+  /**
+   * @return Google_Service_PubsubLite_Cursor
+   */
+  public function getHeadCursor()
   {
-    return $this->processorVersion;
+    return $this->headCursor;
   }
 }

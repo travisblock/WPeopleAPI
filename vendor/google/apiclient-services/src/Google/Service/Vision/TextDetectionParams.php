@@ -15,16 +15,16 @@
  * the License.
  */
 
-class Google_Service_Document_GoogleCloudDocumentaiUiv1beta3TrainProcessorVersionResponse extends Google_Model
+class Google_Service_Vision_TextDetectionParams extends Google_Model
 {
-  public $processorVersion;
+  public $enableTextDetectionConfidenceScore;
 
-  public function setProcessorVersion($processorVersion)
+  public function setEnableTextDetectionConfidenceScore($enableTextDetectionConfidenceScore)
   {
-    $this->processorVersion = $processorVersion;
+    $this->enableTextDetectionConfidenceScore = $enableTextDetectionConfidenceScore;
   }
-  public function getProcessorVersion()
+  public function getEnableTextDetectionConfidenceScore()
   {
-    return $this->processorVersion;
+    return $this->enableTextDetectionConfidenceScore;
   }
 }

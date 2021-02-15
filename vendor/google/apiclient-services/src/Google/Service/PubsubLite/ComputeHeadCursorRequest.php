@@ -15,16 +15,16 @@
  * the License.
  */
 
-class Google_Service_Document_GoogleCloudDocumentaiUiv1beta3TrainProcessorVersionResponse extends Google_Model
+class Google_Service_PubsubLite_ComputeHeadCursorRequest extends Google_Model
 {
-  public $processorVersion;
+  public $partition;
 
-  public function setProcessorVersion($processorVersion)
+  public function setPartition($partition)
   {
-    $this->processorVersion = $processorVersion;
+    $this->partition = $partition;
   }
-  public function getProcessorVersion()
+  public function getPartition()
   {
-    return $this->processorVersion;
+    return $this->partition;
   }
 }

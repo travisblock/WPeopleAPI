@@ -15,16 +15,16 @@
  * the License.
  */
 
-class Google_Service_Document_GoogleCloudDocumentaiUiv1beta3TrainProcessorVersionResponse extends Google_Model
+class Google_Service_Bigquery_DatasetAccessEntryTargetTypes extends Google_Model
 {
-  public $processorVersion;
+  public $targetType;
 
-  public function setProcessorVersion($processorVersion)
+  public function setTargetType($targetType)
   {
-    $this->processorVersion = $processorVersion;
+    $this->targetType = $targetType;
   }
-  public function getProcessorVersion()
+  public function getTargetType()
   {
-    return $this->processorVersion;
+    return $this->targetType;
   }
 }
