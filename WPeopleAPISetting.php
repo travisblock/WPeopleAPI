@@ -2,7 +2,7 @@
 
 namespace Bims;
 
-use Bims\Encryptor;
+use Bims\Helpers\Encryptor;
 
 class WPeopleAPISetting
 {
