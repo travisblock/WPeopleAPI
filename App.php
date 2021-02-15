@@ -32,7 +32,6 @@ if (is_admin()) {
     $setting = new WPeopleAPISetting();
     if (!empty($_POST['wpeopleapi_setting_option_name']['the_client_id']) && !empty($_POST['wpeopleapi_setting_option_name']['the_client_secret'])) {
         $people->storeClientSecret($_POST['wpeopleapi_setting_option_name']['the_client_id'], $_POST['wpeopleapi_setting_option_name']['the_client_secret']);
-        exit;
     }
 
     $people->setBaseUrl();

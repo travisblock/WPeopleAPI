@@ -42,7 +42,7 @@ class WPeopleAPISetting
             <p>Here to setting your WPeopleAPI</p>
             <?php settings_errors(); ?>
 
-            <form method="post" action="options-general.php?page=wpeopleapi-setting">
+            <form method="post" action="options.php">
                 <?php
                 settings_fields('wpeopleapi_setting_option_group');
                 do_settings_sections('wpeopleapi-setting-admin');
@@ -88,11 +88,11 @@ class WPeopleAPISetting
     {
         $sanitary_values = array();
         if (isset($input['the_client_id'])) {
-            $sanitary_values['the_client_id'] = Encryptor::encrypt($input['the_client_id'], $this->key);
+            $sanitary_values['the_client_id'] = Encryptor::encrypt(sanitize_text_field($input['the_client_id']), $this->key);
         }
 
         if (isset($input['the_client_secret'])) {
-            $sanitary_values['the_client_secret'] = Encryptor::encrypt($input['the_client_secret'], $this->key);
+            $sanitary_values['the_client_secret'] = Encryptor::encrypt(sanitize_text_field($input['the_client_secret']), $this->key);
         }
 
         return $sanitary_values;
@@ -154,7 +154,7 @@ class WPeopleAPISetting
                 echo '<div>Authorized as ' . $this->tokenInfo->email . '<a class="button" style="vertical-align: middle;margin-left: 10px;background: #DC3232;border:none;color:#fff" href="?page=wpeopleapi-setting&removeAuthWPeopleAPI=true">Remove</a></div>';
                 return;
             }
-            echo '<a target="_blank" class="button button-primary" href="' . $this->authorizer . '">Authorize</a>';
+            echo '<a class="button button-primary" href="' . $this->authorizer . '">Authorize</a>';
             return;
         } else {
             echo "Not available";
