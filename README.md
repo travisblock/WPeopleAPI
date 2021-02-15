@@ -8,10 +8,13 @@ A wordpress plugin to create contact in google contact using PeopleAPI
 ```
 Request                               | Parameter
 --------------------------------------+---------------------------------------------
-POST /wp-json/wpeopleapi/v1/contact   | - name  : string (required)
-                                      | - phone : number (required)
-Desc: Create Contact                  | - email : string valid email (required)
-                                      | - photo : string base64 encoded (optional)
+POST /wp-json/wpeopleapi/v1/contact   | header:
+                                      |   x-WPeopleAPI-key => your own key (required)
+                                      | body:
+                                      |  - name  : string (required)
+                                      |  - phone : number (required)
+Desc: Create Contact                  |  - email : string valid email (required)
+                                      |  - photo : string base64 encoded (optional)
 --------------------------------------+---------------------------------------------
 GET /wp-json/wpeopleapi/v1/contact    | not required
                                       |

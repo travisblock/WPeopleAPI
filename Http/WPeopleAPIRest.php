@@ -9,6 +9,12 @@ class WPeopleAPIRest extends \WP_REST_Controller
     protected $my_namespace = 'wpeopleapi/v';
     protected $my_version = '1';
 
+    /**
+     * Setting your own key
+     * @todo add key dinamicly via wordpress setting
+     */
+    private $key = '123reverse321';
+
     public function register_routes()
     {
         $namespace = $this->my_namespace . $this->my_version;
@@ -23,7 +29,7 @@ class WPeopleAPIRest extends \WP_REST_Controller
                 'methods'               => \WP_REST_Server::READABLE,
                 'callback'              => array($this, 'listContact'),
                 'permission_callback'   => array($this, 'getListPermission')
-            )
+            ),
         ));
     }
 
@@ -34,7 +40,12 @@ class WPeopleAPIRest extends \WP_REST_Controller
 
     public function getCreatePermission()
     {
-        return true;
+        $header = getallheaders();
+        if (isset($header['x-WPeopleAPI-key']) && $header['x-WPeopleAPI-key'] == $this->key) {
+            return true;
+        }
+
+        return new \WP_Error('rest_forbidden', esc_html__( 'Anda tidak punya akses kesini', 'my-text-domain' ), array('status' => 403));
     }
 
     public function getListPermission()
@@ -46,7 +57,7 @@ class WPeopleAPIRest extends \WP_REST_Controller
         return true;
     }
 
-    public function createContact(WP_REST_Request $request)
+    public function createContact(\WP_REST_Request $request)
     {   
         $people = new WPeopleAPI();
         $name   = $request['name'];
