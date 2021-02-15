@@ -1,6 +1,6 @@
 <?php
 
-namespace Bims;
+namespace Bims\Helpers;
 
 class Encryptor
 {
