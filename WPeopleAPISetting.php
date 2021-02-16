@@ -39,7 +39,7 @@ class WPeopleAPISetting
 
         <div class="wrap">
             <h2>WPeopleAPI Setting</h2>
-            <p>Here to setting your WPeopleAPI</p>
+            <p>Here to setting your WPeopleAPI. For documentation visit <a target="_blank" href="https://github.com/ajid2/WPeopleAPI">here</a></p>
             <?php settings_errors(); ?>
 
             <form method="post" action="options.php">
