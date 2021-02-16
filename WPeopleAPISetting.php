@@ -46,8 +46,11 @@ class WPeopleAPISetting
                 <?php
                 settings_fields('wpeopleapi_setting_option_group');
                 do_settings_sections('wpeopleapi-setting-admin');
-                submit_button();
                 ?>
+                <p class="submit">
+                    <input type="submit" name="wpeopleapi_setting_option_name[submit_wpeopleapi]" id="submit" class="button button-primary" value="Simpan Perubahan">
+                    <input type="submit" name="wpeopleapi_setting_option_name[update_token]" id="update_token" class="button button-primary" value="Update Token Only">
+                </p>
             </form>
         </div>
 <?php }
@@ -95,16 +98,27 @@ class WPeopleAPISetting
     public function wpeopleapi_setting_sanitize($input)
     {
         $sanitary_values = array();
-        if (isset($input['the_client_id'])) {
-            $sanitary_values['the_client_id'] = Encryptor::encrypt(sanitize_text_field($input['the_client_id']), $this->key);
-        }
 
-        if (isset($input['the_client_secret'])) {
-            $sanitary_values['the_client_secret'] = Encryptor::encrypt(sanitize_text_field($input['the_client_secret']), $this->key);
-        }
+        if (!isset($input['update_token'])) {
+            if (isset($input['the_client_id'])) {
+                $sanitary_values['the_client_id'] = Encryptor::encrypt(sanitize_text_field($input['the_client_id']), $this->key);
+            }
 
-        if (isset($input['authorization_token'])) {
-            $sanitary_values['authorization_token'] = sanitize_text_field($input['authorization_token']);
+            if (isset($input['the_client_secret'])) {
+                $sanitary_values['the_client_secret'] = Encryptor::encrypt(sanitize_text_field($input['the_client_secret']), $this->key);
+            }
+
+            if (isset($input['authorization_token'])) {
+                $sanitary_values['authorization_token'] = sanitize_text_field($input['authorization_token']);
+            }
+        }else{
+            if (isset($input['authorization_token'])) {
+                $sanitary_values['authorization_token'] = sanitize_text_field($input['authorization_token']);
+            }
+            $opt = get_option('wpeopleapi_setting_option_name');
+
+            $sanitary_values['the_client_id']       = (isset($opt['the_client_id'])) ? $opt['the_client_id'] : '';
+            $sanitary_values['the_client_secret']   = (isset($opt['the_client_secret'])) ? $opt['the_client_secret'] : '';
         }
 
         return $sanitary_values;
