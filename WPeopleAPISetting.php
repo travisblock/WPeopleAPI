@@ -82,6 +82,14 @@ class WPeopleAPISetting
             'wpeopleapi-setting-admin', // page
             'wpeopleapi_setting_setting_section' // section
         );
+
+        add_settings_field(
+            'authorization_token', // id
+            'Authorization Token', // title
+            array($this, 'authorization_token'), // callback
+            'wpeopleapi-setting-admin', // page
+            'wpeopleapi_setting_setting_section' // section
+        );
     }
 
     public function wpeopleapi_setting_sanitize($input)
@@ -95,6 +103,10 @@ class WPeopleAPISetting
             $sanitary_values['the_client_secret'] = Encryptor::encrypt(sanitize_text_field($input['the_client_secret']), $this->key);
         }
 
+        if (isset($input['authorization_token'])) {
+            $sanitary_values['authorization_token'] = sanitize_text_field($input['authorization_token']);
+        }
+
         return $sanitary_values;
     }
 
@@ -105,7 +117,7 @@ class WPeopleAPISetting
     public function the_client_id_callback()
     {
         printf(
-            '<input class="regular-text" type="text" name="wpeopleapi_setting_option_name[the_client_id]" id="the_client_id" value="%s">',
+            '<input class="regular-text" type="text" name="wpeopleapi_setting_option_name[the_client_id]" id="the_client_id" value="%s" required="true">',
             isset($this->wpeopleapi_setting_options['the_client_id']) ? esc_attr($this->wpeopleapi_setting_options['the_client_id']) : ''
         );
     }
@@ -113,8 +125,17 @@ class WPeopleAPISetting
     public function the_client_secret_callback()
     {
         printf(
-            '<input class="regular-text" type="password" name="wpeopleapi_setting_option_name[the_client_secret]" id="the_client_secret" value="%s">',
+            '<input class="regular-text" type="password" name="wpeopleapi_setting_option_name[the_client_secret]" id="the_client_secret" value="%s" required="true">',
             isset($this->wpeopleapi_setting_options['the_client_secret']) ? esc_attr($this->wpeopleapi_setting_options['the_client_secret']) : ''
+        );
+    }
+
+    public function authorization_token()
+    {
+        printf(
+            '<input class="regular-text" type="password" name="wpeopleapi_setting_option_name[authorization_token]" id="authorization_token" value="%s" required="true">
+            <p style="font-style: italic;color: #888;">The authorization token used to validate your request. Put this token to your request HTTP_AUTHORIZATION and use <b>Bearer</b> token</p>',
+            isset($this->wpeopleapi_setting_options['authorization_token']) ? esc_attr($this->wpeopleapi_setting_options['authorization_token']) : ''
         );
     }
 
