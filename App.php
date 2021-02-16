@@ -2,11 +2,11 @@
 defined('ABSPATH') or exit('Silence is golden');
 
 /* Plugin Name: WPeopleAPI
- * Plugin URI: http://api.com
+ * Plugin URI: https://github.com/ajid2/WPeopleAPI
  * Description: Create contect in google contact using Google PeopleAPI.
- * Version: 0.1.2
- * Author: KomsBims
- * Author URI: https://api.com
+ * Version: 1
+ * Author: PT. Bimasakti
+ * Author URI: https://ptbimasakti.com/
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  **/
@@ -20,7 +20,7 @@ use Bims\Http\WPeopleAPIRest;
 // init rest server
 $rest_server = new WPeopleAPIRest();
 $rest_server->hookRestServer();
-  
+
 // admin
 $people = new WPeopleAPI();
 if (is_admin()) {
