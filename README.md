@@ -3,33 +3,40 @@
 A wordpress plugin to create contact in google contact using PeopleAPI 
 
 
-## Example Request
+## Create contact
 
-```
-Request                               | Parameter
---------------------------------------+---------------------------------------------
-POST /wp-json/wpeopleapi/v1/contact   | header:
-                                      |  - HTTP_AUTHORIZATION => Your Bearer token. 
-Desc: Create Contact                  |     setting in plugin settings page. 
-                                      |     default: wpeopleapi (required)
-                                      | body:
-                                      |  - name  : string (required)
-                                      |  - phone : number (required)
-                                      |  - email : string valid email (required)
-                                      |  - photo : string base64 encoded (optional)
---------------------------------------+---------------------------------------------
-GET /wp-json/wpeopleapi/v1/contact    | not required
-                                      |
-Desc: List all contact (admin only)   |
---------------------------------------+---------------------------------------------
-```
+URL: `POST /wp-json/wpeopleapi/v1/contact`
+
+| Parameter  | Desc |
+|------------|------|
+| body              |
+|                   |
+| `name`      | String (required) |
+| `phone`     | Number (required) |
+| `email`     | String (required) |
+| `photo`     | String base64 encoded (optional) |
+| `group`     | String: name of existing/new label (optional) |
+| `address`   | array : `address[city]` & `address[country]` (optional) |
+| `birthday`  | String international date format `yyy-mm-dd` (optional) |
+| `events`    | array: `events[type]` & `events[date]` (optional) |
+| `urls`      | array: `urls[]` which should contain pipe `\|` which means `type\|value` |
+| `custom`    | array: `custom[]` which should contain pipe `\|` which means `key\|value` |
 
 
-### Example create contact
 ```
 curl --location --request POST 'https://yourdomain.com/wp-json/wpeopleapi/v1/contact' \
 --header 'Authorization: Bearer wpeopleapi' \
 --form 'name="Stark"' \
---form 'phone="07662123213"' \
---form 'email="stark@gmail.com"'
+--form 'phone="08956433721"' \
+--form 'email="stark@gamil.com"' \
+--form 'group="WPFORM"' \
+--form 'address[city]="Medan"' \
+--form 'address[country]="Indonesia"' \
+--form 'birthday="1997-02-23"' \
+--form 'events[type]="Input submitted"' \
+--form 'events[date]="2021-02-18"' \
+--form 'urls[]="Referer|https://stackoverflow.com/questions/3206020/push-item-to-associative-array-in-php/3206038"' \
+--form 'urls[]="Form Submitted|https://masrukhanonline.com"' \
+--form 'custom[]="Device|ifhone"' \
+--form 'custom[]="maps|6756345,77677654"'
 ```
