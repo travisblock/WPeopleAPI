@@ -42,8 +42,8 @@ if (is_admin()) {
         }
         
         if ($people->getToken()) {
-            if ($people->tokenInfo($people->getToken()->access_token)) {
-                $setting->setTokenInfo($people->tokenInfo($people->getToken()->access_token));
+            if ($people->tokenInfo()) {
+                $setting->setTokenInfo($people->tokenInfo());
             } else {
                 $refresh = $people->getClient()->refreshToken($people->getToken()->refresh_token);
                 $people->storeJsonToken($refresh);
@@ -66,7 +66,7 @@ if (is_admin()) {
 // guest
 if ($people->isValidFile()) {
     if ($people->getToken()) {
-        if (!$people->tokenInfo($people->getToken()->access_token)) {
+        if (!$people->tokenInfo()) {
             $refresh = $people->getClient()->refreshToken($people->getToken()->refresh_token);
             $people->storeJsonToken($refresh);
         }
