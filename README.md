@@ -9,8 +9,8 @@ URL: `POST /wp-json/wpeopleapi/v1/contact`
 
 | Parameter  | Desc |
 |------------|------|
+| header     | `Authorization: Bearer [TOKEN]` |
 | body              |
-|                   |
 | `name`      | String (required) |
 | `phone`     | Number (required) |
 | `email`     | String (required) |
