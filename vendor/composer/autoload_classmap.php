@@ -9,6 +9,7 @@ return array(
     'Bims\\Core\\Filename' => $baseDir . '/Core/Filename.php',
     'Bims\\Core\\Instance' => $baseDir . '/Core/Instance.php',
     'Bims\\Core\\WPeopleAPI' => $baseDir . '/Core/WPeopleAPI.php',
+    'Bims\\Helpers\\Arr' => $baseDir . '/Helpers/Arr.php',
     'Bims\\Helpers\\Encryptor' => $baseDir . '/Helpers/Encryptor.php',
     'Bims\\Http\\Response' => $baseDir . '/Http/Response.php',
     'Bims\\Http\\WPeopleAPIRest' => $baseDir . '/Http/WPeopleAPIRest.php',

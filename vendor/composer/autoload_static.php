@@ -115,6 +115,7 @@ class ComposerStaticInit7379a2aafbccbb209733060da439a057
         'Bims\\Core\\Filename' => __DIR__ . '/../..' . '/Core/Filename.php',
         'Bims\\Core\\Instance' => __DIR__ . '/../..' . '/Core/Instance.php',
         'Bims\\Core\\WPeopleAPI' => __DIR__ . '/../..' . '/Core/WPeopleAPI.php',
+        'Bims\\Helpers\\Arr' => __DIR__ . '/../..' . '/Helpers/Arr.php',
         'Bims\\Helpers\\Encryptor' => __DIR__ . '/../..' . '/Helpers/Encryptor.php',
         'Bims\\Http\\Response' => __DIR__ . '/../..' . '/Http/Response.php',
         'Bims\\Http\\WPeopleAPIRest' => __DIR__ . '/../..' . '/Http/WPeopleAPIRest.php',
