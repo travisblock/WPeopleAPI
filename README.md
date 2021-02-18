@@ -35,8 +35,8 @@ curl --location --request POST 'https://yourdomain.com/wp-json/wpeopleapi/v1/con
 --form 'birthday="1997-02-23"' \
 --form 'events[type]="Input submitted"' \
 --form 'events[date]="2021-02-18"' \
---form 'urls[]="Referer|https://stackoverflow.com/questions/3206020/push-item-to-associative-array-in-php/3206038"' \
---form 'urls[]="Form Submitted|https://masrukhanonline.com"' \
+--form 'urls[]="Referer|https://github.com/ajid2/WPeopleAPI"' \
+--form 'urls[]="Form Submitted|https://exampledomain.com"' \
 --form 'custom[]="Device|ifhone"' \
 --form 'custom[]="maps|6756345,77677654"'
 ```
