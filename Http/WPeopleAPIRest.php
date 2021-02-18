@@ -3,6 +3,7 @@
 namespace Bims\Http;
 use Bims\Core\WPeopleAPI;
 use Bims\Http\Response;
+use Bims\Helpers\Arr;
 
 class WPeopleAPIRest extends \WP_REST_Controller
 {
@@ -68,28 +69,36 @@ class WPeopleAPIRest extends \WP_REST_Controller
 
     public function createContact(\WP_REST_Request $request)
     {   
-        $people = new WPeopleAPI();
-        $name   = $request['name'];
-        $phone  = $request['phone'];
-        $email  = $request['email'];
-        $photo  = $request['photo'];
+        $people         = new WPeopleAPI();
+        $name           = $request['name'];
+        $phone          = $request['phone'];
+        $email          = $request['email'];
+        $photo          = $request['photo'];
+        $group          = ( isset($request['group']) ) ? $request['group'] : null;
+        $address        = ( is_array($request['address']) ) ? $request['address'] : [];
+        $birth          = ( isset($request['birthday']) ) ? Arr::dateToArray($request['birthday'])::result() : [];
+        $events         = ( is_array($request['events']) ) ? $request['events'] : [];
+        $events['date'] = ( isset($events['date']) ) ? Arr::dateToArray($request['events']['date'])::result() : [];
+        
+        $urls           = ( is_array($request['urls']) ) ? Arr::arrToPipeArray($request['urls'], 'type,value')::result() : [];
+        $custom         = ( is_array($request['custom']) ) ? Arr::arrToPipeArray($request['custom'], 'key,value')::result() : [];
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->message = 'Email not valid';
             return Response::set('Email not valid');
         }
 
+        if (!isset($name, $phone, $email)) {
+            return Response::set('Missing required parameter. see https://github.com/ajid2/WPeopleAPI');
+        }
+
         if (isset($name, $phone, $email) && !empty($photo)) {
-            $store =  $people->store($name, $phone, $email);
+            $store =  $people->store($name, $phone, $email, $group, $address, $birth, $urls, $events, $custom);
             $people->updateContactPhoto($store->resourceName, $photo);
             return $store;
         }
 
-        if (isset($name, $phone, $email)) {
-            return $people->store($name, $phone, $email);
-        }
-
-       return Response::set('Form tidak valid');
+        return $people->store($name, $phone, $email, $group, $address, $birth, $urls, $events, $custom);
     }
 
     public function listContact(WP_REST_Request $request)

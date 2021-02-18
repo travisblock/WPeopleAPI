@@ -6,6 +6,7 @@ use Google\Client;
 use GuzzleHttp\Client as Http;
 use Throwable;
 use Bims\Core\Instance;
+use Bims\Helpers\Arr;
 
 class WPeopleAPI
 {
@@ -66,37 +67,71 @@ class WPeopleAPI
      * @param $token string access_token
      * @return GuzzleHttp\Client response
      */
-    public function store($name = null, $phone = null, $email = null, $token = false)
+    public function store($name = null, $phone = null, $email = null, $group = null, $address = [], $birth = [], $urls = [], $events = [], $userDefined = [])
     {
+        $get_token = $this->getToken();
+        $token = $get_token->access_token;
         if (!$token) {
-            $get_token = $this->getToken();
-            $token = $get_token->access_token;
-            if (!$token) {
-                $this->message = 'Token invalid, please renew token';
-                return false;
-            }
+            $this->message = 'Token invalid, please renew token';
+            return false;
         }
 
         $http       = new Http();
-        $endpoint   = 'https://people.googleapis.com/v1/people:createContact?personFields=names%2CphoneNumbers%2CemailAddresses&sources=READ_SOURCE_TYPE_CONTACT&prettyPrint=true';
+        $endpoint   = 'https://people.googleapis.com/v1/people:createContact?personFields=names%2CphoneNumbers%2CemailAddresses%2Caddresses%2Curls%2Cevents%2Cbirthdays%2CuserDefined&sources=READ_SOURCE_TYPE_CONTACT&prettyPrint=true';
+        $groupID    = $this->getGroupByName($group);
+        $body  = [
+            'names' => [
+                ['givenName' => $name]
+            ],
+            'phoneNumbers' => [
+                ['value' => $phone]
+            ],
+            'emailAddresses' => [
+                [
+                    'displayName' => $name,
+                    'value' => $email
+                ]
+            ],
+            'memberships' => [
+                [
+                    'contactGroupMembership' => [
+                        'contactGroupResourceName' => (isset($groupID->resourceName)) ? $groupID->resourceName : 'contactGroups/myContacts'
+                    ]
+                ]
+            ],
+            'addresses' => [
+                [
+                    'city'              => ucwords($address['city'] ?? null),
+                    'countryCode'       => strtoupper($address['countryCode'] ?? null),
+                    'country'           => strtoupper($address['country'] ?? null),
+                    'formattedValue'    => ucwords($address['city'] ?? null) . ' ' . strtoupper($address['countryCode'] ?? $address['country'] ?? null)
+                ]
+            ],
+            'birthdays' => [
+                [
+                    'date'  => [
+                        'year'  => $birth['year'] ?? null,
+                        'month' => $birth['month'] ?? null,
+                        'day'   => $birth['day'] ?? null
+                    ]
+                ]
+            ],
+            'urls'  => [
+                (is_array($urls)) ? $urls : null
+            ],
+            'events' => [
+                (is_array($events)) ? $events : null
+            ],
+            'userDefined' => [
+                (is_array($userDefined)) ? $userDefined : null
+            ],
+
+        ];
 
         try {
             $response = $http->request('POST', $endpoint, [
-                'body' => json_encode([
-                    'names' => [
-                        ['givenName' => $name]
-                    ],
-                    'phoneNumbers' => [
-                        ['value' => $phone]
-                    ],
-                    'emailAddresses' => [
-                        [
-                            'displayName' => $name,
-                            'value' => $email
-                        ]
-                    ]
-                ]),
-                'headers' => [
+                'body'      => json_encode($body),
+                'headers'   => [
                     'content-type'  => 'application/json',
                     'Authorization' => 'Bearer ' . $token,
                     'Accept'        => 'application/json'
@@ -106,7 +141,7 @@ class WPeopleAPI
             return json_decode($response->getBody()->getContents());
         } catch (Throwable $e) {
             $this->message = $e->getMessage();
-            return false;
+            return $this->message;
         }
     }
 
@@ -206,8 +241,12 @@ class WPeopleAPI
      * 
      * @return json token information
      */
-    public function tokenInfo($access_token)
+    public function tokenInfo($access_token =  false)
     {
+        if (!$access_token) {
+            $access_token = $this->getToken()->access_token;
+        }
+
         $http = new Http();
         try {
             $response = $http->request('GET', 'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' . $access_token);
@@ -397,4 +436,75 @@ class WPeopleAPI
     {
         return is_file(dirname(__DIR__) . '/Config/' . $this->getClientSecret());
     }
+
+    /**
+     * get group(contactGroups) by name
+     * 
+     * @param $name string of name
+     * @return Bims\Helpers\Arr
+     */
+    public function getGroupByName($name, $access_token = false)
+    {
+        if (!$access_token) {
+            $access_token = $this->getToken()->access_token;
+        }
+
+        $http = new Http();
+        try {
+            $response = $http->request('GET', 'https://people.googleapis.com/v1/contactGroups', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $access_token,
+                    'Accept'        => 'application/json'
+                ]
+            ]);
+
+            $array  = json_decode($response->getBody()->getContents(), TRUE);
+            $filter = Arr::filter($array, $name)::toObject()::result();
+
+            if (is_object($filter)) {
+                return $filter;
+            } else{
+                return $this->createGroup($name);
+            }
+
+        } catch (Throwable $e) {
+            $this->message = $e->getMessage();
+            return false;
+        }
+
+    }
+
+    /**
+     * Create Group
+     * @param $name string
+     */
+
+     public function createGroup($name, $access_token=false)
+     {
+        if (!$access_token) {
+            $access_token = $this->getToken()->access_token;
+        }
+
+        $http = new Http();
+        try{
+            $response = $http->request('POST', 'https://people.googleapis.com/v1/contactGroups', [
+                'body' => json_encode([
+                    'contactGroup' => [
+                        'name' => $name
+                    ]
+                ]),
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $access_token,
+                    'Accept'        => 'application/json',
+                    'content-type'  => 'application/json',
+                ]
+            ]);
+
+            return json_decode($response->getBody()->getContents());
+
+        } catch (Throwable $e) {
+            $this->message = $e->getMessage();
+            return false;
+        }
+     }
 }
