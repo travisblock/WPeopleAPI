@@ -29,6 +29,7 @@ curl --location --request POST 'https://yourdomain.com/wp-json/wpeopleapi/v1/con
 --form 'name="Stark"' \
 --form 'phone="08956433721"' \
 --form 'email="stark@gamil.com"' \
+--form 'photo="base64 encoded string"' \
 --form 'group="WPFORM"' \
 --form 'address[city]="Medan"' \
 --form 'address[country]="Indonesia"' \
