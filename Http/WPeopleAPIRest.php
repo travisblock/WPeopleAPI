@@ -78,10 +78,15 @@ class WPeopleAPIRest extends \WP_REST_Controller
         $address        = ( is_array($request['address']) ) ? $request['address'] : [];
         $birth          = ( isset($request['birthday']) ) ? Arr::dateToArray($request['birthday'])::result() : [];
         $events         = ( is_array($request['events']) ) ? $request['events'] : [];
-        $events['date'] = ( isset($events['date']) ) ? Arr::dateToArray($request['events']['date'])::result() : [];
+
+        if (!empty($events) && isset($events['date'])) {
+            $events['date'] = Arr::dateToArray($request['events']['date'])::result();
+        }
         
         $urls           = ( is_array($request['urls']) ) ? Arr::arrToPipeArray($request['urls'], 'type,value')::result() : [];
         $custom         = ( is_array($request['custom']) ) ? Arr::arrToPipeArray($request['custom'], 'key,value')::result() : [];
+        
+        return Response::set($events);
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->message = 'Email not valid';
