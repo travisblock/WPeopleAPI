@@ -86,8 +86,6 @@ class WPeopleAPIRest extends \WP_REST_Controller
         $urls           = ( is_array($request['urls']) ) ? Arr::arrToPipeArray($request['urls'], 'type,value')::result() : [];
         $custom         = ( is_array($request['custom']) ) ? Arr::arrToPipeArray($request['custom'], 'key,value')::result() : [];
         
-        return Response::set($events);
-
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->message = 'Email not valid';
             return Response::set('Email not valid');
