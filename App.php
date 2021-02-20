@@ -50,7 +50,7 @@ if (is_admin()) {
             }
         }
 
-        if (isset($_GET['code'])) {
+        if (isset($_GET['code']) && basename($_SERVER['PHP_SELF']) == 'options-general.php') {
             $people->storeToken($_GET['code']);
         }
 
@@ -60,6 +60,7 @@ if (is_admin()) {
     }
 
     $setting->authorizer();
+
 }
 
 
