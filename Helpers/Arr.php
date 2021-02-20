@@ -38,7 +38,10 @@ class Arr
     public static function dateToArray(string $date, string $delimiter = '-')
     {
         // intl format = yyyy-mm-dd
-        $format = explode($delimiter, $date);
+        $parse  = str_replace('/', '-', $date);
+        $parse  = date_create($parse);
+        $parse  = date_format($parse, 'Y-m-d');
+        $format = explode($delimiter, $parse);
         $date   = [];
         if (is_array($format) && count($format) >= 3) {
             $date['year']   = $format[0];
