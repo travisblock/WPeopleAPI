@@ -20,7 +20,7 @@ URL: `POST /wp-json/wpeopleapi/v1/contact`
 | `birthday`  | String international date format `yyy-mm-dd` (optional) |
 | `events`    | array: `events[type]` & `events[date]` (optional) |
 | `urls`      | array or string: `urls[]` which should contain pipe `\|` which means `type\|value` |
-| `custom`    | array: `custom[]` which should contain pipe `\|` which means `key\|value` |
+| `custom`    | array or string: `custom[]` which should contain pipe `\|` which means `key\|value` |
 
 
 ```
