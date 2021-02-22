@@ -75,17 +75,12 @@ class WPeopleAPIRest extends \WP_REST_Controller
         $email          = $request['email'];
         $photo          = $request['photo'];
         $group          = ( isset($request['group']) ) ? $request['group'] : null;
-        $address        = ( is_array($request['address']) ) ? $request['address'] : [];
+        $address        = RestSupport::address($request);
         $birth          = ( isset($request['birthday']) ) ? Arr::dateToArray($request['birthday'])::result() : [];
-        $events         = ( is_array($request['events']) ) ? $request['events'] : [];
-
-        if (!empty($events) && isset($events['date'])) {
-            $events['date'] = Arr::dateToArray($request['events']['date'])::result();
-        }
-        
+        $events         = RestSupport::events($request);
         $urls           = ( is_array($request['urls']) ) ? Arr::arrToPipeArray($request['urls'], 'type,value')::result() : [];
         $custom         = ( is_array($request['custom']) ) ? Arr::arrToPipeArray($request['custom'], 'key,value')::result() : [];
-        
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->message = 'Email not valid';
             return Response::set('Email not valid');
@@ -123,7 +118,6 @@ class WPeopleAPIRest extends \WP_REST_Controller
             $requestHeaders = apache_request_headers();
             // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
             $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
-            //print_r($requestHeaders);
             if (isset($requestHeaders['Authorization'])) {
                 $headers = trim($requestHeaders['Authorization']);
             }
@@ -141,5 +135,48 @@ class WPeopleAPIRest extends \WP_REST_Controller
             }
         }
         return null;
+    }
+}
+
+class RestSupport
+{
+    public static function address(\WP_REST_Request $request)
+    {
+        $address = [];
+        if (is_array($request['address'])) {
+            $address = $request['address'];
+        } else{
+            if (isset($request['addresscity'])) {
+                $address['city'] = $request['addresscity'];
+            }
+
+            if (isset($request['addresscountry'])) {
+                $address['country'] = $request['addresscountry'];
+            }
+        }
+
+        return $address;
+    }
+
+    public static function events(\WP_REST_Request $request)
+    {
+        $events = [];
+        if (is_array($request['events'])) {
+            $events = $request['events'];
+            if (!empty($events) && isset($events['date'])) {
+                $events['date'] = Arr::dateToArray($request['events']['date'])::result();
+            }
+        }else{
+            if (isset($request['eventstype'])) {
+                $events['type'] = $request['eventstype'];
+            }
+
+            if (isset($request['eventsdate'])) {
+                $events['date'] = Arr::dateToArray($request['eventsdate'])::result();
+            }
+
+        }
+        
+        return $events;
     }
 }
